@@ -31,6 +31,16 @@ void FastText::getVector(Vector& vec, const std::string& word) {
   }
 }
 
+void FastText::saveVectors(std::ostream& ofs) {
+  ofs << dict_->nwords() << " " << args_->dim << std::endl;
+  Vector vec(args_->dim);
+  for (int32_t i = 0; i < dict_->nwords(); i++) {
+    std::string word = dict_->getWord(i);
+    getVector(vec, word);
+    ofs << word << " " << vec << std::endl;
+  }
+}
+
 void FastText::saveVectors() {
   std::ofstream ofs(args_->output + ".vec");
   if (!ofs.is_open()) {

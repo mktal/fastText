@@ -53,6 +53,13 @@ void printPrintVectorsUsage() {
     << std::endl;
 }
 
+void printSaveVectorsUsage() {
+  std::cout
+    << "usage: fasttext save-vectors <model>\n\n"
+    << "  <model>      model filename\n"
+    << std::endl;
+}
+
 void test(int argc, char** argv) {
   int32_t k;
   if (argc == 4) {
@@ -121,6 +128,18 @@ void printVectors(int argc, char** argv) {
   exit(0);
 }
 
+void saveVectors(int argc, char** argv) {
+  if (argc != 3) {
+    printSaveVectorsUsage();
+    exit(EXIT_FAILURE);
+  }
+  FastText fasttext;
+  fasttext.loadModel(std::string(argv[2]));
+  fasttext.saveVectors(std::cout);
+
+  exit(0);
+}
+
 void train(int argc, char** argv) {
   std::shared_ptr<Args> a = std::make_shared<Args>();
   a->parseArgs(argc, argv);
@@ -142,6 +161,8 @@ int main(int argc, char** argv) {
     printVectors(argc, argv);
   } else if (command == "predict" || command == "predict-prob" ) {
     predict(argc, argv);
+  } else if (command == "save-vector") {
+    saveVectors(argc, argv);
   } else {
     printUsage();
     exit(EXIT_FAILURE);
